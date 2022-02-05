@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+@using Instagram.Web.Areas.Client.Models.User;
+
+@model SearchViewModel;
+
+<div class="card bg-light  mt-3 mx-auto">
+  <div class="card-header">People</div>
+  <div class="card-body">
+    <div class="list-group mt-1">
+            @foreach(var user in Model.Results)
+            {
+                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                      <a class="mb-1 nav-link" asp-action="Profile" asp-route-username="@user.Username">@(user.FirstName + " " + user.LastName)</a>
+                  </div>  
+              </div>
+            }
+        </div>
+  </div>
+</div>

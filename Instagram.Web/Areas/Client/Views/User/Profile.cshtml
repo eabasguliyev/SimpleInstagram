@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@section Styles{
+	<link rel="stylesheet" href="~/css/userprofile.css"/>
+}
+@using Instagram.Web.Areas.Client.Models.User
+@model ProfileViewModel
+<header>
+
+	<div class="container">
+
+		<div class="profile">
+
+			<div class="profile-image">
+
+				<img src="@(Model.User.ProfileImageUrl ?? @"\images\defaultProfile.png")" alt="User Profile Image">
+
+			</div>
+
+			<div class="profile-user-settings">
+
+				<h1 class="profile-user-name">@Model.User.Username</h1>
+
+				@if(Model.User.Token == Context.Request.Cookies["token"]){
+					<a class="btn profile-edit-btn">Edit Profile</a>
+				}
+				else
+				{
+					if(Model.Followers.FirstOrDefault(u => u.Token == Context.Request.Cookies["token"]) != null)
+					{
+						<a class="btn profile-edit-btn" asp-action="Unfollow" asp-route-id="@Model.User.Id">Following</a>
+					}
+					else
+					{
+						<a class="btn profile-edit-btn" asp-action="Follow" asp-route-id="@Model.User.Id">Follow</a>
+					}
+				}
+
+				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+
+			</div>
+
+			<div class="profile-stats">
+
+				<ul>
+					<li><span class="profile-stat-count">@Model.Posts.Count</span> posts</li>
+					<li><span class="profile-stat-count">@Model.Followers.Count</span> followers</li>
+					<li><span class="profile-stat-count">@Model.Follows.Count</span> following</li>
+				</ul>
+
+			</div>
+
+			<div class="profile-bio">
+
+				<p><span class="profile-real-name">@(Model.User.FirstName + " " + @Model.User.LastName)</span> @Model.User.Description</p>
+
+			</div>
+
+		</div>
+		<!-- End of profile section -->
+
+	</div>
+	<!-- End of container -->
+
+</header>
+
+<main>
+
+	<div class="container">
+
+		<div class="gallery">
+
+			@foreach(var post in Model.Posts)
+			{
+							
+				<div class="gallery-item" tabindex="0">
+
+					<img src="@post.ImageUrl" class="gallery-image" alt="Post image url">
+
+					<div class="gallery-item-info">
+
+						<ul>
+							<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> @post.PostLikes.Count</li>
+							<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
+						</ul>
+
+					</div>
+
+				</div>
+			}
+
+		</div>
+		<!-- End of gallery -->
+
+		@*<div class="loader"></div>*@
+
+	</div>
+	<!-- End of container -->
+
+</main>
